@@ -1,0 +1,60 @@
+{
+    "aicpusername": {
+        "domain": "test.baidu.com",
+        "httpOnly": false,
+        "name": "aicpusername",
+        "path": "/",
+        "secure": false,
+        "value": "aicp-test"
+    },
+    "__cas__id__481": {
+        "domain": ".baidu.com",
+        "httpOnly": false,
+        "name": "__cas__id__481",
+        "path": "/",
+        "secure": false,
+        "value": "20190337"
+    },
+    "__cas__rn__": {
+        "domain": ".baidu.com",
+        "httpOnly": false,
+        "name": "__cas__rn__",
+        "path": "/",
+        "secure": false,
+        "value": "257797124"
+    },
+    "__cas__st__481": {
+        "domain": ".baidu.com",
+        "httpOnly": false,
+        "name": "__cas__st__481",
+        "path": "/",
+        "secure": false,
+        "value": "e2478d2ec698aac415cf0303a559598508a5415583653aecd6825725b950f8ee6bf91baa454b8b7b78c3c960"
+    },
+    "uc_login_unique": {
+        "domain": ".baidu.com",
+        "expiry": 2369443593.270787,
+        "httpOnly": false,
+        "name": "uc_login_unique",
+        "path": "/",
+        "secure": false,
+        "value": "a387b0de1c796c479ff2f559c028d47e"
+    },
+    "SIGNIN_UC": {
+        "domain": ".baidu.com",
+        "httpOnly": true,
+        "name": "SIGNIN_UC",
+        "path": "/",
+        "secure": false,
+        "value": "70a2711cf1d3d9b1a82d2f87d633bd8a02577971244"
+    },
+    "uc_recom_mark": {
+        "domain": ".baidu.com",
+        "expiry": 2369732087.72687,
+        "httpOnly": false,
+        "name": "uc_recom_mark",
+        "path": "/",
+        "secure": false,
+        "value": "cmVjb21tYXJrXzIwMTkwMzM3"
+    }
+}
