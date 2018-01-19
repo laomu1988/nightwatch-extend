@@ -4,7 +4,7 @@
   "description": "nightwatch扩展函数",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --env.dev --colors --inline --hot --port 8087 --host 0.0.0.0",
+    "dev": "webpack --progress --hide-modules --watch",
     "build": "webpack -p --progress --hide-modules",
     "test": "rimraf reports && node nightwatch.js"
   },
