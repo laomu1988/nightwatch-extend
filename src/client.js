@@ -52,19 +52,21 @@ function findDomByText(text, selector, superSelector = 'body') {
 }
 
 function findDomByTextAssist(text, dom) {
-    let myText = (dom.innerText + '').replace(/\n/g, '');
+    let myText = ((dom.innerText || dom.data) + '').replace(/\n/g, '');
     if (myText.indexOf(text) < 0) {
         return null;
     }
-    if (dom.childElementCount > 0) {
-        for (let i = dom.childElementCount - 1; i >= 0; i--) {
-            let d = findDomByTextAssist(text, dom.children[i]);
+    if (dom.TEXT_NODE > 0 || dom.childElementCount > 0) {
+        let node = dom.firstChild;
+        while (node) {
+            let d = findDomByTextAssist(text, node);
             if (d) {
-                return d;
+                return d.tagName ? d : node;
             }
+            node = node.nextSibling;
         }
     }
-    else if (text === myText) {
+    if (text === myText) {
         return dom;
     }
     return null;
