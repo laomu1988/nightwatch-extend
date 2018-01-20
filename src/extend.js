@@ -7,92 +7,41 @@
  * @module
  */
 
-function exec(funcName, args, wait, done) {
+function exec(funcName, args, timeout, done) {
     let start = Date.now();
+    let hasCalled = false;
     function callFunc() {
-        if (window.$night && window.$night) {
-            if (window.$night[funcName]) {
-                try {
-                    let result = window.$night[funcName].apply(window.$night, args);
-                    if (result) {
-                        console.log('exec-result:', result);
-                        if (result instanceof Error) {
-                            done(result + '');
-                        }
-                        else {
-                            done(true);
-                        }
-                    }
-                    else {
-                        setTimeout(callFunc, 20);
-                    }
+        try {
+            if (Date.now() - start > timeout) { // 是否已超时
+                return done('timeout');
+            }
+            if (!window.$night) {
+                // eval(injectjs);
+                // console.log('injectjs');
+                return setTimeout(callFunc, 20);
+            }
+            if (!window.$night[funcName]) {
+                done('Can not find client Function：' + funcName);
+                return;
+            }
+            let result = window.$night[funcName].apply(window.$night, args);
+            if (result) {
+                if (result instanceof Error) {
+                    done(result + '');
                 }
-                catch (err) {
-                    done(err + '');
+                else {
+                    done(true);
                 }
             }
             else {
-                done('Can not find client Function：' + funcName);
+                setTimeout(callFunc, 20);
             }
         }
-        else if (Date.now() - start > wait) {
-            done('timeout');
-        }
-        else {
-            setTimeout(callFunc, 20);
+        catch (err) {
+            done(err);
         }
     }
     callFunc();
-}
-
-function waitForText(text, selector, milisecond, done) {
-    let start = Date.now();
-    function wait() {
-        if (window.$night && window.$night.findDomByText(text, selector)) {
-            done(true);
-        }
-        else if (Date.now() - start > milisecond) {
-            done(null);
-        }
-        else {
-            setTimeout(wait, 20);
-        }
-    }
-    setTimeout(wait, 4);
-}
-
-// 根据label，设置输入框的输入内容
-function labelValue(label, value, done) {
-    let milisecond = 1000;
-    let start = Date.now();
-    function wait() {
-        if (window.$night && window.$night.labelValue(label, value)) {
-            done(true);
-        }
-        else if (Date.now() - start > milisecond) {
-            done(null);
-        }
-        else {
-            setTimeout(wait, 20);
-        }
-    }
-    setTimeout(wait, 4);
-}
-
-function clickText(text, selector, milisecond, done) {
-    let start = Date.now();
-    function wait() {
-        if (window.$night && window.$night.clickText(text, selector)) {
-            done(true);
-        }
-        else if (Date.now() - start > milisecond) {
-            done(null);
-        }
-        else {
-            setTimeout(wait, 20);
-        }
-    }
-    setTimeout(wait, 4);
 }
 
 module.exports = {
@@ -100,8 +49,10 @@ module.exports = {
     waitForText: 'findDomByText',
     labelValue: 'labelValue',
     clickText: 'clickText',
+    waitForUrl: 'waitForUrl',
     names: {
         findDomByText: '等待',
+        waitForUrl: '等待跳转',
         labelValue: 'label输入',
         clickText: '点击'
     }
