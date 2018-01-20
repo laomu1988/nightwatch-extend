@@ -3,7 +3,6 @@
  * @author muzhilong<muzhilong@baidu.com>
  */
 let fs = require('fs');
-let ext = require('../extend');
 let config = require('../config');
 let clientjs = fs.readFileSync(__dirname + '/../../dist/client.js', 'utf8');
 
@@ -11,42 +10,43 @@ let clientjs = fs.readFileSync(__dirname + '/../../dist/client.js', 'utf8');
  * 执行客户端函数
  * @param {string} funcName 函数名
  * @param {Array} args 参数列表
- * @param {number} timeout 超时时间
  * @return {Object} browser对象
  */
-exports.command = function (funcName, args, timeout = 10) {
+exports.command = function (funcName, args) {
+    const me = this;
     if (args && args.length > 0) {
         while (args.length > 0 && typeof args[args.length - 1] === 'undefined') {
             args.pop();
         }
     }
     args = args || [];
+    const msg = '[' + (config.names[funcName] || funcName) + ']' + args.join(', ');
     return this
-        .executeAsync(function (code, done) {
+        .execute(function (clientjs) {
             if (window.$night) {
-                return done(true);
+                return true;
             }
-            try {
-                console.log('run code');
-                eval(code);
-                done(true);
-            }
-            catch (err) {
-                done(err + '');
-            }
+            eval(clientjs);
+            return true;
         }, [clientjs], function (result) {
             if (result.value !== true) {
-                console.error('ErrorWhenInjectCode');
-                this.assert.equal(result.value, true);
+                this.assert.equal(result.value, true, msg);
+                console.trace(result);
             }
         })
-        .executeAsync(ext.exec, [funcName, args, timeout || 10], function (result) {
-            if (result.value !== true) {
-                console.log('    ErrorWhenCall:', ext.names[funcName] || funcName, args.join(', '));
-                this.assert.equal(result.value, true);
+        .execute(function (funcName, args) {
+            if (!window.$night) {
+                return false;
             }
-            else if (config.debug) {
-                console.log('    ', (ext.names[funcName] || funcName) + ':', args.join(', '));
+            return window.$night[funcName].apply(window.$night, args);
+        }, [funcName, args], function (result) {
+            let value = result.value;
+            if (value && value.ELEMENT) { // 返回了元素节点
+                value = true;
+            }
+            me.client.api.assert.equal(value, true, msg);
+            if (value !== true) {
+                console.trace(result);
             }
         });
 };

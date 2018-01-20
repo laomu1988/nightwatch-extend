@@ -3,8 +3,8 @@
  * @author muzhilong<muzhilong@baidu.com>
  */
 
-let ext = require('../extend');
+let config = require('../config');
 
 exports.command = function (text, value) {
-    return this.$exec(ext.labelValue, [text, value]);
+    return this.$execUtil(config.api.labelValue, [text, value], 50);
 };

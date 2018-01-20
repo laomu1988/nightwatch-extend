@@ -3,7 +3,7 @@
  * @author muzhilong<muzhilong@baidu.com>
  */
 
-let ext = require('../extend');
+let config = require('../config');
 exports.command = function (text, selector, timeout = 20) {
-    return this.$exec(ext.clickText, [text, selector], timeout);
+    return this.$execUtil(config.api.clickText, [text, selector], timeout);
 };

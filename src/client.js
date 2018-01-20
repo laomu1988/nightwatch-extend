@@ -28,7 +28,8 @@ function findDomByText(text, selector, superSelector = 'body') {
         let len = doms.length;
         for (let i = 0; i < len; i++) {
             let dom = doms[i];
-            if (dom.innerText.replace(/\s/g, '') === text) {
+            let inner = dom.innerText;
+            if (inner && inner.replace(/\s/g, '') === text) {
                 return dom;
             }
             let value = dom.getAttribute('value');
@@ -51,7 +52,7 @@ function findDomByText(text, selector, superSelector = 'body') {
 }
 
 function findDomByTextAssist(text, dom) {
-    let myText = dom.innerText.replace(/\n/g, '');
+    let myText = (dom.innerText + '').replace(/\n/g, '');
     if (myText.indexOf(text) < 0) {
         return null;
     }
@@ -104,8 +105,20 @@ function clickText(text, selector) {
     return false;
 }
 
+
+function matchUrl(urlOrReg) {
+    if (typeof urlOrReg === 'string' && location.href.indexOf(urlOrReg) >= 0) {
+        return true;
+    }
+    if (urlOrReg && urlOrReg.test && urlOrReg.test(location.href)) {
+        return true;
+    }
+    return false;
+}
+
 client.findDomByText = findDomByText;
 client.labelValue = labelValue;
 client.clickText = clickText;
+client.matchUrl = matchUrl;
 
 module.exports = client;
