@@ -4,7 +4,7 @@ module.exports = {
         browser
             .url('https://cn.vuejs.org/')
             .$waitForText('学习')
-            .$chain([
+            .$chain(
                 function (next) {
                     setTimeout(() => {
                         next(1);
@@ -12,14 +12,19 @@ module.exports = {
                 }, function (result, next) {
                     browser.assert.equal(result, 1);
                     setTimeout(() => {
-                        next(2);
+                        next(2, 3);
                     }, 100);
-                }, function (result, next) {
-                    browser.assert.equal(result, 2);
+                }, function (r2, r3, next) {
+                    browser.assert.equal(r2, 2);
+                    browser.assert.equal(r3, 3);
                     next({obj: 'test'});
-                }], function (result) {
-                    browser.assert.equal(result.value.obj, 'test');
-                })
-            .end();
+                }, function (result, next) {
+                    browser.assert.equal(result.obj, 'test');
+                    next();
+                }, function (next) {
+                    browser.assert.equal(typeof next, 'function');
+                    next();
+                }
+            ).end();
     }
 };

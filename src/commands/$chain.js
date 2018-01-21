@@ -9,24 +9,27 @@ const config = require('../config');
 
 /**
  * 链式调用
- * @param {Array} funcs 函数列表： 函数参数(result, next), result为上一个函数的执行结果, next表示当前执行完毕，开始执行下一个函数。。 第一个函数只有next
- * @param {Function} cb 回调函数
+ * @param {Function} func... 函数列表，函数参数([result...], next), result为上一个函数执行后调用next时的参数列表, next表示当前执行完毕，开始执行下一个函数。。 第一个函数参数只有next。 当当前函数执行完毕后，调用next(result1, result2)将参数传递给下一个函数.
  * @return {Object} Nightwatch
  */
-function command(funcs, cb) {
+function command() {
     const me = this;
+    const funcs = arguments;
     let index = 0;
+    let len = funcs.length;
     wait();
-    function wait(result) {
+    function wait() {
         let func = funcs[index];
+        let args = Array.prototype.slice.call(arguments, 0).concat(wait);
         index += 1;
-        if (func) {
-            func.call(me.client.api, index > 1 ? result : wait, wait);
+        // console.log(index + 'args:', args);
+        if (typeof func === 'function') {
+            func.apply(me.client.api, args);
+        }
+        else if (index < len) {
+            wait();
         }
         else {
-            if (typeof cb === 'function') {
-                cb.call(me.client.api, {value: result});
-            }
             me.emit('complete');
         }
     }

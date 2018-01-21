@@ -16,11 +16,11 @@ exports.command = function (text, cb) {
                 console.log(result);
             }
         })
-        .$chain([
+        .$chain(
             function (next) {
                 me.moveToElement(selector, 5, 5, function () {
                     next();
                 });
             }
-        ]);
+        );
 };
