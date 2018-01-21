@@ -10,6 +10,7 @@ module.exports = {
         clickText: '点击'
     },
     api: {
+        getSelector: 'getSelector',
         waitForText: 'findDomByText',
         labelValue: 'labelValue',
         clickText: 'clickText',

@@ -107,6 +107,20 @@ function clickText(text, selector) {
     return false;
 }
 
+let selectorCount = 0;
+function getSelector(text) {
+    let dom = findDomByText(text);
+    if (dom) {
+        let id = dom.getAttribute('night-random-id');
+        if (!id) {
+            selectorCount += 1;
+            id = selectorCount + '_' + Math.random();
+            dom.setAttribute('night-random-id', id);
+        }
+        return dom.tagName + `[night-random-id="${id}"]`;
+    }
+    return null;
+}
 
 function matchUrl(urlOrReg) {
     if (typeof urlOrReg === 'string' && location.href.indexOf(urlOrReg) >= 0) {
@@ -122,5 +136,6 @@ client.findDomByText = findDomByText;
 client.labelValue = labelValue;
 client.clickText = clickText;
 client.matchUrl = matchUrl;
+client.getSelector = getSelector;
 
 module.exports = client;
