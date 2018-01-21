@@ -18,7 +18,7 @@ module.exports = {
             }
         }
         catch (e) {
-            console.log('readCookieError:', e);
+            console.error('readCookieError:', e);
         }
     },
     // 修改cookie内容

@@ -1,8 +1,14 @@
 /**
  * @file 测试文件总配置
  */
+const debug = require('debug')('nightwatch-extend');
+let isDebug = process.env.debug
+    || process.argv.indexOf('--debug') >= 0
+    || process.argv.indexOf('--verbose') >= 0
+    || process.argv.indexOf('DEBUG') >= 0;
 module.exports = {
-    debug: process.env.debug || false,
+    debug: isDebug,
+    log: debug,
     names: {
         findDomByText: '等待',
         matchUrl: '等待跳转',

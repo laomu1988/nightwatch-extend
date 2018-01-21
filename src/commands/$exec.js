@@ -21,6 +21,7 @@ exports.command = function (funcName, args, cb) {
     }
     args = args || [];
     const msg = '[' + (config.names[funcName] || funcName) + ']' + args.join(', ');
+    config.log('$exec: start', funcName, args);
     return this
         .execute(function (clientjs) {
             if (window.$night) {
@@ -29,6 +30,7 @@ exports.command = function (funcName, args, cb) {
             eval(clientjs);
             return true;
         }, [clientjs], function (result) {
+            config.log('$exec: injectjs', funcName, args);
             if (result.value !== true) {
                 this.assert.equal(result.value, true, msg);
                 console.trace(result);
@@ -40,6 +42,7 @@ exports.command = function (funcName, args, cb) {
             }
             return window.$night[funcName].apply(window.$night, args);
         }, [funcName, args], function (result) {
+            config.log('$exec: result', funcName, JSON.stringify(result));
             let value = result.value;
             if (cb) {
                 cb(result);

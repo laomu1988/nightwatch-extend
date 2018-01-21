@@ -32,6 +32,7 @@ function command(funcName, args, timeout = 50, cb) {
     const msg = '[' + (config.names[funcName] || funcName) + ']' + args.join(', ');
     wait();
     function wait() {
+        config.log('exec-util: start', funcName, args, timeout);
         me.client.api.execute(function (clientjs) {
             if (window.$night) {
                 return true;
@@ -39,6 +40,7 @@ function command(funcName, args, timeout = 50, cb) {
             eval(clientjs);
             return true;
         }, [clientjs], function (result) {
+            config.log('exec-util: inject', funcName, args, timeout);
             if (result.value !== true) {
                 this.assert.equal(result.value, true, msg);
                 console.trace(result);
@@ -61,6 +63,7 @@ function command(funcName, args, timeout = 50, cb) {
                 return false;
             }
         }, [funcName, args], function (result) {
+            config.log('$exec-util: result', funcName, JSON.stringify(result));
             let value = result.value;
             if (value) {
                 if (typeof funcName === 'string' && !cb) {

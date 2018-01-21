@@ -22,15 +22,17 @@ function command() {
         let func = funcs[index];
         let args = Array.prototype.slice.call(arguments, 0).concat(wait);
         index += 1;
-        // console.log(index + 'args:', args);
         if (typeof func === 'function') {
+            config.log('$chain:', index, arguments);
             func.apply(me.client.api, args);
         }
         else if (index < len) {
+            config.log('$chain:', index, arguments);
             wait();
         }
         else {
             me.emit('complete');
+            config.log('$chain: complete');
         }
     }
     return this;
