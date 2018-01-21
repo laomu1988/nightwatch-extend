@@ -7,16 +7,16 @@
  */
 /* eslint-disable */
 module.exports = {
-    src_folders: ['cases'],
-    output_folder: 'reports',
+    src_folders: ['test'],
+    output_folder: 'test/reports',
 
     // page_objects_path: 'test/page_objects_path',
-    // custom_commands_path: ['node_modules/nightwatch-helpers/commands'],
+    custom_commands_path: ['src/commands'],
     // custom_assertions_path: ['node_modules/nightwatch-helpers/assertions'],
     selenium: {
         start_process: true,
         server_path: require('selenium-server').path,
-        log_path: 'reports/',
+        log_path: 'test/reports/',
         host: '127.0.0.1',
         port: 4444,
         cli_args: {
@@ -30,10 +30,10 @@ module.exports = {
             selenium_host: 'localhost',
             silent: true,
             screenshots: {
-                enabled: false,
+                enabled: true,
                 on_failure: true,
                 on_error: true,
-                path: 'reports/screenshots'
+                path: 'test/reports/screenshots'
             }
         },
 
