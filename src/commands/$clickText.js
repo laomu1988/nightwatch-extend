@@ -4,6 +4,6 @@
  */
 
 let config = require('../config');
-exports.command = function (text, selector, timeout = 20) {
-    return this.$execUtil(config.api.clickText, [text, selector], timeout);
+exports.command = function (text, timeout = 20, cb) {
+    return this.$execUtil(config.api.clickText, [text], timeout, cb);
 };

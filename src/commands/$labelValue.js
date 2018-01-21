@@ -5,6 +5,6 @@
 
 let config = require('../config');
 
-exports.command = function (text, value) {
-    return this.$execUtil(config.api.labelValue, [text, value], 50);
+exports.command = function (text, value, cb) {
+    return this.$execUtil(config.api.labelValue, [text, value], 20, cb);
 };

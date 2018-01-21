@@ -8,9 +8,21 @@ const events = require('events');
 const clientjs = fs.readFileSync(__dirname + '/../../dist/client.js', 'utf8');
 const config = require('../config');
 
+/**
+ * 调用函数至到函数返回结果!!result为true
+ * @param {string|Function} funcName 函数体或者$night扩展函数名称
+ * @param {Array} args 参数列表
+ * @param {number} [timeout] 超时时间，默认50ms
+ * @param {Function} [cb] 回调函数
+ * @return {Object} Nightwatch
+ */
 function command(funcName, args, timeout = 50, cb) {
     const me = this;
     const start = Date.now();
+    if (typeof timeout === 'function') {
+        cb = timeout;
+        timeout = 50;
+    }
     if (args && args.length > 0) {
         while (args.length > 0 && typeof args[args.length - 1] === 'undefined') {
             args.pop();
@@ -37,7 +49,12 @@ function command(funcName, args, timeout = 50, cb) {
                 return false;
             }
             try {
-                return window.$night[funcName].apply(window.$night, args);
+                if (typeof funcName === 'string') {
+                    return window.$night[funcName].apply(window.$night, args);
+                }
+                else {
+                    return funcName.apply(window, args);
+                }
             }
             catch (err) {
                 console.trace(err);
@@ -45,15 +62,17 @@ function command(funcName, args, timeout = 50, cb) {
             }
         }, [funcName, args], function (result) {
             let value = result.value;
-            if (value && value.ELEMENT) { // 返回了元素节点
-                value = true;
-            }
             if (value) {
-                me.client.api.assert.equal(value, true, msg);
-                if (value !== true) {
-                    console.trace(result);
+                if (typeof funcName === 'string' && !cb) {
+                    if (value && value.ELEMENT) { // 返回了元素节点
+                        value = true;
+                    }
+                    me.client.api.assert.equal(value, true, msg);
+                    if (value !== true) {
+                        console.trace(result);
+                    }
                 }
-                if (cb) {
+                else if (typeof cb === 'function') {
                     cb.call(me.client.api, value);
                 }
                 me.emit('complete');
