@@ -7,13 +7,8 @@ module.exports = {
     test(browser) {
         browser
             .url('https://cn.vuejs.org/')
-            .$waitForText('学习', 1000, function (result) {
-                this.assert.equal(typeof result.ELEMENT, 'string');
-            })
-            .$moveToText('学习', function (result) {
-                this.assert.equal(typeof result.ELEMENT, 'string');
-            })
-            .$waitForText('教程')
+            .$waitForText('学习')
+            .$moveToText('学习')
             .$clickText('教程')
             .$waitForUrl('/v2/guide')
             .end();
