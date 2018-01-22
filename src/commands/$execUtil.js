@@ -11,7 +11,7 @@ const config = require('../config');
 /**
  * 调用函数至到函数返回结果!!result为true
  * @param {string|Function} funcName 函数体或者$night扩展函数名称
- * @param {Array} args 参数列表
+ * @param {Array} [args] 参数列表
  * @param {number} [timeout] 超时时间，默认50ms
  * @param {Function} [cb] 回调函数
  * @return {Object} Nightwatch
@@ -23,12 +23,23 @@ function command(funcName, args, timeout = 50, cb) {
         cb = timeout;
         timeout = 50;
     }
-    if (args && args.length > 0) {
+    if (typeof args === 'number') {
+        timeout = args;
+        args = [];
+    }
+    if (typeof args === 'function') {
+        cb = args;
+        args = [];
+        timeout = 50;
+    }
+    if (args && args.length > 0 && args.pop) {
         while (args.length > 0 && typeof args[args.length - 1] === 'undefined') {
             args.pop();
         }
     }
-    args = args || [];
+    else {
+        args = [];
+    }
     const msg = '[' + (config.names[funcName] || funcName) + ']' + args.join(', ');
     wait();
     function wait() {

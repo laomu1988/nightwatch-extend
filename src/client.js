@@ -20,6 +20,9 @@ inputEvent.eventType = 'message';
  * @return {DOM} 查找到的dom节点，未找到时返回null
  */
 function findDomByText(text, selector, superSelector = 'body') {
+    if (!text || typeof text !== 'string') {
+        return new Error('findDomByText(text) need text as string');
+    }
     console.log('findDomByText', text, selector);
     text = (text + '').replace(/\s/g, '');
     let root = document.querySelector(superSelector);
@@ -70,6 +73,14 @@ function findDomByTextAssist(text, dom) {
         return dom;
     }
     return null;
+}
+
+function notText(text) {
+    let dom = findDomByText(text);
+    if (dom && (dom.style.display !== 'none' && dom.style.opacity !== '0')) {
+        return null;
+    }
+    return true;
 }
 
 /**

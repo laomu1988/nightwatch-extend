@@ -9,17 +9,24 @@ let clientjs = fs.readFileSync(__dirname + '/../../dist/client.js', 'utf8');
 /**
  * 执行客户端函数
  * @param {string} funcName 函数名
- * @param {Array} args 参数列表
+ * @param {Array} [args] 参数列表
+ * @param {Function} [cb] 回调函数
  * @return {Object} browser对象
  */
 exports.command = function (funcName, args, cb) {
     const me = this;
-    if (args && args.length > 0) {
+    if (typeof args === 'function') {
+        cb = args;
+        args = [];
+    }
+    if (args && args.length > 0 && args.pop) {
         while (args.length > 0 && typeof args[args.length - 1] === 'undefined') {
             args.pop();
         }
     }
-    args = args || [];
+    else {
+        args = [];
+    }
     const msg = '[' + (config.names[funcName] || funcName) + ']' + args.join(', ');
     config.log('$exec: start', funcName, args);
     return this

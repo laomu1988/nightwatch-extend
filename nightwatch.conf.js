@@ -12,7 +12,7 @@ module.exports = {
 
     // page_objects_path: 'test/page_objects_path',
     custom_commands_path: ['src/commands'],
-    // custom_assertions_path: ['node_modules/nightwatch-helpers/assertions'],
+    custom_assertions_path: ['src/assertions'],
     selenium: {
         start_process: true,
         server_path: require('selenium-server').path,
