@@ -4,18 +4,14 @@
  */
 const config = require('../config');
 exports.assertion = function (text) {
-    this.message = 'Testing if document has NOT element with <' + text + '>.';
+    this.message = 'Testing if document has NOT element with text “' + text + '”.';
     this.expected = null;
     this.pass = function (val) {
         return val === this.expected;
     };
     this.value = function (res) {
         config.log('assert.$hasText: result', res);
-        let value = res.value;
-        if (value && value.ELEMENT) {
-            value = true;
-        }
-        return value;
+        return res.value;
     };
     this.command = function (cb) {
         var self = this;

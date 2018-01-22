@@ -5,6 +5,7 @@
 let fs = require('fs');
 let config = require('../config');
 let clientjs = fs.readFileSync(__dirname + '/../../dist/client.js', 'utf8');
+const common = require('../common');
 
 /**
  * 执行客户端函数
@@ -29,39 +30,19 @@ exports.command = function (funcName, args, cb) {
     }
     const msg = '[' + (config.names[funcName] || funcName) + ']' + args.join(', ');
     config.log('$exec: start', funcName, args);
-    return this
-        .execute(function (clientjs) {
-            if (window.$night) {
-                return true;
+    return common.clientFunc(me, funcName, args, function (result) {
+        let value = result.value;
+        if (typeof cb === 'function') {
+            cb(result);
+        }
+        else {
+            if (value && value.ELEMENT) { // 返回了元素节点
+                value = true;
             }
-            eval(clientjs);
-            return true;
-        }, [clientjs], function (result) {
-            config.log('$exec: injectjs', funcName, args);
-            if (result.value !== true) {
-                this.assert.equal(result.value, true, msg);
+            me.client.api.assert.equal(value, true, msg);
+            if (value !== true) {
                 console.trace(result);
             }
-        })
-        .execute(function (funcName, args) {
-            if (!window.$night) {
-                return false;
-            }
-            return window.$night[funcName].apply(window.$night, args);
-        }, [funcName, args], function (result) {
-            config.log('$exec: result', funcName, JSON.stringify(result));
-            let value = result.value;
-            if (cb) {
-                cb(result);
-            }
-            else {
-                if (value && value.ELEMENT) { // 返回了元素节点
-                    value = true;
-                }
-                me.client.api.assert.equal(value, true, msg);
-                if (value !== true) {
-                    console.trace(result);
-                }
-            }
-        });
+        }
+    });
 };

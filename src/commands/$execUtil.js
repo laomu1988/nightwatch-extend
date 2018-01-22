@@ -7,6 +7,7 @@ const util = require('util');
 const events = require('events');
 const clientjs = fs.readFileSync(__dirname + '/../../dist/client.js', 'utf8');
 const config = require('../config');
+const common = require('../common');
 
 /**
  * 调用函数至到函数返回结果!!result为true
@@ -44,36 +45,7 @@ function command(funcName, args, timeout = 50, cb) {
     wait();
     function wait() {
         config.log('exec-util: start', funcName, args, timeout);
-        me.client.api.execute(function (clientjs) {
-            if (window.$night) {
-                return true;
-            }
-            eval(clientjs);
-            return true;
-        }, [clientjs], function (result) {
-            config.log('exec-util: inject', funcName, args, timeout);
-            if (result.value !== true) {
-                this.assert.equal(result.value, true, msg);
-                console.trace(result);
-            }
-        })
-        .execute(function (funcName, args) {
-            if (!window.$night) {
-                return false;
-            }
-            try {
-                if (typeof funcName === 'string') {
-                    return window.$night[funcName].apply(window.$night, args);
-                }
-                else {
-                    return funcName.apply(window, args);
-                }
-            }
-            catch (err) {
-                console.trace(err);
-                return false;
-            }
-        }, [funcName, args], function (result) {
+        return common.clientFunc(me.client.api, funcName, args, function (result) {
             config.log('$exec-util: result', funcName, JSON.stringify(result));
             let value = result.value;
             if (value) {

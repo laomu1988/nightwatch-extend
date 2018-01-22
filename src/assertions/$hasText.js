@@ -5,7 +5,7 @@
 const config = require('../config');
 
 exports.assertion = function (text) {
-    this.message = 'Testing if document has element with <' + text + '>.';
+    this.message = 'Testing if document has element with text “' + text + '”.';
     this.expected = true;
     this.pass = function (val) {
         return val === this.expected;

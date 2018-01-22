@@ -12,6 +12,25 @@ inputEvent.initEvent('input', true, true);
 inputEvent.eventType = 'message';
 // client.$ = $;
 
+// 返回错误提示内容
+function error(...argv) {
+    let msg = argv[0];
+    if (argv.length === 1) {
+        if (msg instanceof Error) {
+            return {
+                errmsg: msg.message,
+                stack: msg.stack
+            };
+        } else {
+            msg = msg + '';
+        }
+    }
+    else {
+        msg = argv.join('，');
+    }
+    return {errmsg: msg};
+}
+
 /**
  * 根据文本内容查找dom
  * @param {string} text 要查找的文本
@@ -21,7 +40,7 @@ inputEvent.eventType = 'message';
  */
 function findDomByText(text, selector, superSelector = 'body') {
     if (!text || typeof text !== 'string') {
-        return new Error('findDomByText(text) need text as string');
+        return error('findDomByText(text) need text as string');
     }
     console.log('findDomByText', text, selector);
     text = (text + '').replace(/\s/g, '');
@@ -143,10 +162,24 @@ function matchUrl(urlOrReg) {
     return false;
 }
 
+
+function catchError(func) {
+    return function (...argv) {
+        try {
+            return func.apply(window.$night, argv);
+        }
+        catch (err) {
+            return error(err);
+        }
+    };
+}
+
 client.findDomByText = findDomByText;
 client.labelValue = labelValue;
 client.clickText = clickText;
 client.matchUrl = matchUrl;
 client.getSelector = getSelector;
+client.error = error;
+client.notText = notText;
 
 module.exports = client;
