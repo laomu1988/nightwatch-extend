@@ -1,22 +1,39 @@
 # nightwatch测试扩展函数
-  封装[nightwatch](http://nightwatchjs.org/gettingstarted)部分函数
+  提供[nightwatch](http://nightwatchjs.org/gettingstarted)部分扩展函数
 
-## 功能
-- [ ] 客户端引入jquery等扩展函数
-- [ ] 根据文字查找dom，然后触发点击等动作
-- [ ] 根据文字查找最近输入框输入内容
-- [ ] 自动延迟，当第一次未查找到指定节点时，间隔50ms查询一次，最多等待5秒钟
-- [ ] 查找dom或内容时，避免加载中弹窗，当有dialog展示时，仅查询dialog中内容
-- [ ] 根据内容查找节点时，过滤掉隐藏节点
-- [ ] 封装拖拽动作
-- [ ] 修改debug模式等配置
+## 安装
+```
+npm install nightwatch-extend --save-dev
+```
 
-## 函数列表
-* $waitForText(innerText, timeout) 等待展示文本节点
-* $clickText(innerText, timeout) 根据文本内容
+## 使用
+在 Nightwatch 配置文件中增加:
+```
+{
+  "custom_commands_path": ["node_modules/nightwatch-helpers/commands"],
+  "custom_assertions_path": ["node_modules/nightwatch-helpers/assertions"]
+}
+```
+
+## 包含内容
+### Assertions
+* $hasText(text) 存在文本内容为text的节点（文本会过滤空格，避免空格影响判断）
+* $notText(text) 不存在文本内容为text的节点（文本会过滤空格，避免空格影响判断）
+
+### Commands
+* $chain(func1, func2, func3...) 链式操作，每个函数最后一个参数为next，执行next(arg1, arg2...)即可将参数传入下一个函数
+* $waitForText(text, [timeout = 2000], [cb]) 等待展示文本节点
+* $waitForNotText(text, [timeout = 2000], [cb]) 等待文本消失
+* $waitForUrl(urlOrReg, [timeout = 2000], [cb]) 等待跳转到指定链接
+* $clickText(innerText, cb) 点击根据文本找到到的dom节点
 * $labelValue(labelText, inputValue) 根据label查找输入框并设置值
+* $moveToText(text, cb) 移动鼠标到text节点
 
 ## nightwatch环境依赖
 * node 版本6.0及以上
 * java 版本1.8及以上（使用命令行java -version检查版本，，低于1.8请更新jdk）
 * chrome 版本59及以上
+
+## 开发注意问题
+* 客户端函数的error对象不能被序列化，所以错误不能作为执行结果返回
+* 客户端返回的dom节点，到执行脚本时只会保留一个Element，结构{ELEMENT: '....'}
