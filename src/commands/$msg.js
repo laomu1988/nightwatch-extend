@@ -2,6 +2,15 @@
  * @file 展示提示消息
  */
 
-exports.command = function (msg) {
-    return this.assert.equal(typeof msg, 'string', msg);
-};
+const config = require('../config');
+function command(msg) {
+    config.log('$msg: start', msg);
+    return this.execute(function () {
+        return true;
+    }, [], function () {
+        this.assert.equal(typeof msg, 'string', msg);
+        config.log('$msg: end', msg);
+    });
+}
+
+exports.command = command;

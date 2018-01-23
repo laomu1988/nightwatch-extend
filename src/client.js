@@ -74,7 +74,7 @@ function findDomByText(text, selector, superSelector = 'body') {
 }
 
 function findDomByTextAssist(text, dom) {
-    let myText = ((dom.innerText || dom.data) + '').replace(/\n/g, '');
+    let myText = ((dom.innerText || dom.data) + '').replace(/\s/g, '');
     if (myText.indexOf(text) < 0) {
         return null;
     }
@@ -174,12 +174,12 @@ function catchError(func) {
     };
 }
 
-client.findDomByText = findDomByText;
-client.labelValue = labelValue;
-client.clickText = clickText;
-client.matchUrl = matchUrl;
-client.getSelector = getSelector;
+client.findDomByText = catchError(findDomByText);
+client.labelValue = catchError(labelValue);
+client.clickText = catchError(clickText);
+client.matchUrl = catchError(matchUrl);
+client.getSelector = catchError(getSelector);
 client.error = error;
-client.notText = notText;
+client.notText = catchError(notText);
 
 module.exports = client;

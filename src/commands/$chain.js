@@ -2,7 +2,6 @@
  * @file 链式调用
  * @author muzhilong<muzhilong@baidu.com>
  */
-const fs = require('fs');
 const util = require('util');
 const events = require('events');
 const config = require('../config');
@@ -24,7 +23,12 @@ function command() {
         index += 1;
         if (typeof func === 'function') {
             config.log('$chain:', index, arguments);
-            func.apply(me.client.api, args);
+            try {
+                func.apply(me.client.api, args);
+            }
+            catch (err) {
+                console.error(err);
+            }
         }
         else if (index < len) {
             config.log('$chain:', index, arguments);

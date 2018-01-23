@@ -2,9 +2,7 @@
  * @file 执行client端的函数
  * @author muzhilong<muzhilong@baidu.com>
  */
-let fs = require('fs');
 let config = require('../config');
-let clientjs = fs.readFileSync(__dirname + '/../../dist/client.js', 'utf8');
 const common = require('../common');
 
 /**

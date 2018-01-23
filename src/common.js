@@ -46,9 +46,11 @@ function clientFunc(browser, funcName, args, cb) {
             this.assert.equal(result.value, true);
         }
     })
+    .pause(5)
     .execute(function (funcName, args) {
         if (!window.$night) {
-            return {errmsg: '$night is NOT ready'};
+            // $night is not ready.
+            return null;
         }
         if (!window.$night[funcName]) {
             return window.$night.error('$night has NOT func ' + funcName);

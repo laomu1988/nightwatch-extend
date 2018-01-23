@@ -21,6 +21,7 @@ npm install nightwatch-extend --save-dev
 * $notText(text) 不存在文本内容为text的节点（文本会过滤空格，避免空格影响判断）
 
 ### Commands
+* $msg(msg) 展示消息
 * $chain(func1, func2, func3...) 链式操作，每个函数最后一个参数为next，执行next(arg1, arg2...)即可将参数传入下一个函数
 * $waitForText(text, [timeout = 2000], [cb]) 等待展示文本节点
 * $waitForNotText(text, [timeout = 2000], [cb]) 等待文本消失

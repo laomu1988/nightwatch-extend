@@ -2,10 +2,8 @@
  * @file 执行客户端函数直到指定结果
  * @author muzhilong<muzhilong@baidu.com>
  */
-const fs = require('fs');
 const util = require('util');
 const events = require('events');
-const clientjs = fs.readFileSync(__dirname + '/../../dist/client.js', 'utf8');
 const config = require('../config');
 const common = require('../common');
 
