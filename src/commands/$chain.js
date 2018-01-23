@@ -1,6 +1,6 @@
 /**
  * @file 链式调用
- * @author muzhilong<muzhilong@baidu.com>
+ * @author laomu1988@qq.com
  */
 const util = require('util');
 const events = require('events');

@@ -1,10 +1,10 @@
 /**
  * @file 移动到指定文字内容上
- * @author muzhilong<muzhilong@baidu.com>
+ * @author laomu1988@qq.com
  */
 const config = require('../config');
 
 exports.command = function (text, cb) {
     config.log('$moveToText: start', text);
-    return this.$textSelectorCommand(text, 'moveToElement', [5, 5], cb);
+    return this.$selectorCommand(text, 'moveToElement', [5, 5], cb);
 };

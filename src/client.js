@@ -5,12 +5,12 @@
  * @author muzhilong
  * @module
  */
-// const $ = window.jQuery || require('jquery');
+const $ = window.jQuery || require('jquery');
 const client = window.$night = {};
 const inputEvent = document.createEvent('UIEvents');
 inputEvent.initEvent('input', true, true);
 inputEvent.eventType = 'message';
-// client.$ = $;
+client.$ = $;
 
 // 返回错误提示内容
 function error(...argv) {
@@ -35,7 +35,7 @@ function error(...argv) {
  * 根据文本内容查找dom
  * @param {string} text 要查找的文本
  * @param {string} [selector] 文本所在的选择器
- * @param {string} [superSelector] 容器的选择器，默认body
+ * @param {string|DOM} [superSelector] 容器的选择器，默认body
  * @return {DOM} 查找到的dom节点，未找到时返回null
  */
 function findDomByText(text, selector, superSelector = 'body') {
@@ -44,7 +44,7 @@ function findDomByText(text, selector, superSelector = 'body') {
     }
     console.log('findDomByText', text, selector);
     text = (text + '').replace(/\s/g, '');
-    let root = document.querySelector(superSelector);
+    let root = superSelector.querySelector ? superSelector : document.querySelector(superSelector);
     if (selector) {
         let doms = root.querySelector(selector);
         let len = doms.length;
@@ -139,12 +139,20 @@ function clickText(text, selector) {
 
 let selectorCount = 0;
 function getSelector(text) {
-    let dom = findDomByText(text);
+    let len = arguments.length;
+    let dom;
+    if (len === 2) {
+        dom = closest(text, arguments[1]);
+    }
+    else {
+        dom = findDomByText(text);
+    }
+
     if (dom) {
         let id = dom.getAttribute('night-random-id');
         if (!id) {
             selectorCount += 1;
-            id = selectorCount + '_' + Math.random();
+            id = (selectorCount + '_' + Math.random()).replace('.', '');
             dom.setAttribute('night-random-id', id);
         }
         return dom.tagName + `[night-random-id="${id}"]`;
@@ -153,6 +161,7 @@ function getSelector(text) {
 }
 
 function matchUrl(urlOrReg) {
+    console.log('matchUrl:', urlOrReg);
     if (typeof urlOrReg === 'string' && location.href.indexOf(urlOrReg) >= 0) {
         return true;
     }
@@ -160,6 +169,29 @@ function matchUrl(urlOrReg) {
         return true;
     }
     return false;
+}
+
+// 查找最近的其他文本节点
+function closest(startText, targetText) {
+    let dom = findDomByText(startText);
+    if (!dom) {
+        return null;
+    }
+
+    targetText = (targetText + '').replace(/\s/g, '');
+    let bodyText = document.body.innerText.replace(/\s/g, '');
+    if (bodyText.indexOf(targetText) < 0) {
+        return null;
+    }
+
+    while (dom && dom.tagName && dom.tagName !== 'HTML') {
+        let target = findDomByText(targetText, '', dom);
+        if (target) {
+            return target;
+        }
+        dom = dom.parentElement;
+    }
+    return null;
 }
 
 

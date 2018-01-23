@@ -1,6 +1,6 @@
 /**
  * @file 执行client端的函数
- * @author muzhilong<muzhilong@baidu.com>
+ * @author laomu1988@qq.com
  */
 let config = require('../config');
 const common = require('../common');

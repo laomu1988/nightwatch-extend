@@ -1,6 +1,6 @@
 /**
  * @file 根据label查找input并输入值
- * @author muzhilong<muzhilong@baidu.com>
+ * @author laomu1988@qq.com
  */
 
 let config = require('../config');

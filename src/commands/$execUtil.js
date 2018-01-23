@@ -1,6 +1,6 @@
 /**
  * @file 执行客户端函数直到指定结果
- * @author muzhilong<muzhilong@baidu.com>
+ * @author laomu1988@qq.com
  */
 const util = require('util');
 const events = require('events');

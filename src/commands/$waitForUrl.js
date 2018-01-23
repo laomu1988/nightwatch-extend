@@ -1,6 +1,6 @@
 /**
  * @file 等待跳转到指定网址
- * @author muzhilong<muzhilong@baidu.com>
+ * @author laomu1988@qq.com
  */
 let config = require('../config');
 

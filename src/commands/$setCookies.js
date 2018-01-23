@@ -1,6 +1,6 @@
 /**
  * @file 批量设置cookies
- * @author muzhilong<muzhilong@baidu.com>
+ * @author laomu1988@qq.com
  */
 
 

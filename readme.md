@@ -25,10 +25,13 @@ npm install nightwatch-extend --save-dev
 * $chain(func1, func2, func3...) 链式操作，每个函数最后一个参数为next，执行next(arg1, arg2...)即可将参数传入下一个函数
 * $waitForText(text, [timeout = 2000], [cb]) 等待展示文本节点
 * $waitForNotText(text, [timeout = 2000], [cb]) 等待文本消失
+* $hasText(text, cb) 判断是否存在text节点，存在则回调函数result的value为true
 * $waitForUrl(urlOrReg, [timeout = 2000], [cb]) 等待跳转到指定链接
 * $clickText(innerText, cb) 点击根据文本找到到的dom节点
 * $labelValue(labelText, inputValue) 根据label查找输入框并设置值
 * $moveToText(text, cb) 移动鼠标到text节点
+* $call(func) 执行func, 非异步
+
 
 ## nightwatch环境依赖
 * node 版本6.0及以上

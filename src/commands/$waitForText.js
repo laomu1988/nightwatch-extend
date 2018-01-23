@@ -1,6 +1,6 @@
 /**
  * @file 等待指定文本出现
- * @author muzhilong<muzhilong@baidu.com>
+ * @author laomu1988@qq.com
  */
 let config = require('../config');
 
