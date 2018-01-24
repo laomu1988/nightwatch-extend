@@ -7,5 +7,13 @@ let config = require('../config');
 
 exports.command = function (text, cb) {
     config.log('$clickText: start', text);
-    return this.$selectorCommand(text, 'click', cb);
+    const msg = '[点击]' + text;
+    return this.$selectorCommand(text, 'click', function (result) {
+        if (!cb) {
+            this.assert.equal(JSON.stringify(result.value), 'null', msg);
+        }
+        else {
+            cb(result);
+        }
+    });
 };

@@ -9,18 +9,18 @@ const common = require('../common');
 
 /**
  * 调用函数至到函数返回结果!!result为true
- * @param {string|Function} funcName 函数体或者$night扩展函数名称
+ * @param {string} funcName $night扩展函数名称
  * @param {Array} [args] 参数列表
- * @param {number} [timeout] 超时时间，默认50ms
+ * @param {number} [timeout] 超时时间，默认5000ms
  * @param {Function} [cb] 回调函数
  * @return {Object} Nightwatch
  */
-function command(funcName, args, timeout = 50, cb) {
+function command(funcName, args, timeout = 5000, cb) {
     const me = this;
     const start = Date.now();
     if (typeof timeout === 'function') {
         cb = timeout;
-        timeout = 50;
+        timeout = 5000;
     }
     if (typeof args === 'number') {
         timeout = args;
@@ -29,7 +29,7 @@ function command(funcName, args, timeout = 50, cb) {
     if (typeof args === 'function') {
         cb = args;
         args = [];
-        timeout = 50;
+        timeout = 5000;
     }
     if (args && args.length > 0 && args.pop) {
         while (args.length > 0 && typeof args[args.length - 1] === 'undefined') {
@@ -39,6 +39,7 @@ function command(funcName, args, timeout = 50, cb) {
     else {
         args = [];
     }
+    timeout = timeout || 5000;
     const msg = '[' + (config.names[funcName] || funcName) + ']' + args.join(', ');
     function wait() {
         config.log('$exec-util: start', funcName, args, timeout);
@@ -46,14 +47,11 @@ function command(funcName, args, timeout = 50, cb) {
             config.log('$exec-util: result', funcName, JSON.stringify(result));
             let value = result.value;
             if (value) {
-                if (typeof funcName === 'string' && !cb) {
+                if (!cb) {
                     if (value && value.ELEMENT) { // 返回了元素节点
                         value = true;
                     }
-                    me.client.api.assert.equal(value, true, msg);
-                    if (value !== true) {
-                        console.trace(result);
-                    }
+                    me.client.api.assert.equal(JSON.stringify(value), 'true', msg);
                 }
                 else if (typeof cb === 'function') {
                     cb.call(me.client.api, value);

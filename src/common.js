@@ -11,7 +11,7 @@ function error(...argv) {
     if (argv.length === 1) {
         if (msg instanceof Error) {
             return {
-                errmsg: msg.message,
+                message: msg.message,
                 stack: msg.stack
             };
         }
@@ -22,7 +22,7 @@ function error(...argv) {
     else {
         msg = argv.join('，');
     }
-    return {errmsg: msg};
+    return {message: msg};
 }
 
 function clientFunc(browser, funcName, args, cb) {
@@ -36,14 +36,14 @@ function clientFunc(browser, funcName, args, cb) {
         }
         catch (err) {
             return {
-                errmsg: err.message,
+                message: err.message,
                 stack: err.stack
             };
         }
         return true;
     }, [clientjs], function (result) {
         if (result.value !== true) {
-            this.assert.equal(result.value, true);
+            this.assert.equal(JSON.stringify(result.value), 'true', 'InjectClientJS');
         }
     })
     .pause(5)
@@ -61,7 +61,6 @@ function clientFunc(browser, funcName, args, cb) {
         cb(result);
     });
 }
-
 
 module.exports = {
     error,

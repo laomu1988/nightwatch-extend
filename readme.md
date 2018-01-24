@@ -30,8 +30,8 @@ npm install nightwatch-extend --save-dev
 * $clickText(innerText, cb) 点击根据文本找到到的dom节点
 * $labelValue(labelText, inputValue) 根据label查找输入框并设置值
 * $moveToText(text, cb) 移动鼠标到text节点
-* $call(func) 执行func, 非异步
-
+* $call(func) 执行func, 非异步(执行环境是命令端)
+* $wait(func, [args], [timeout = 5000], [cb]) 浏览器端反复执行函数直到函数返回true则结束执行
 
 ## nightwatch环境依赖
 * node 版本6.0及以上

@@ -37,10 +37,7 @@ exports.command = function (funcName, args, cb) {
             if (value && value.ELEMENT) { // 返回了元素节点
                 value = true;
             }
-            me.client.api.assert.equal(value, true, msg);
-            if (value !== true) {
-                console.trace(result);
-            }
+            me.client.api.assert.equal(JSON.stringify(value), 'true', msg);
         }
     });
 };

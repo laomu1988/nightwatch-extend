@@ -18,7 +18,8 @@ function error(...argv) {
     if (argv.length === 1) {
         if (msg instanceof Error) {
             return {
-                errmsg: msg.message,
+                message: msg.message,
+                where: 'client.js',
                 stack: msg.stack
             };
         } else {
@@ -28,7 +29,7 @@ function error(...argv) {
     else {
         msg = argv.join('，');
     }
-    return {errmsg: msg};
+    return {message: msg};
 }
 
 /**
@@ -103,26 +104,29 @@ function notText(text) {
 }
 
 /**
- * 根据label设置输入框的输入内容
+ * 根据label查找输入框
  * @param {string} label label中文字
- * @param {string} value 输入框中要输入的文字
- * @return {DOM} 查找到的输入框, 未找到输入框时返回null
+ * @return {string} 查找到的输入框, 未找到输入框时返回null
  */
-function labelValue(label, value = '') {
+function labelInput(label) {
+    console.log('labelInput:', label);
     let dom = findDomByText(label);
     if (dom) {
-        let p = dom.parentNode;
+        let p = dom;
         let input = p.querySelector('input');
-        if (!input) {
-            input = p.parentNode.querySelector('input');
+        if (!input && p.parentNode) {
+            p = p.parentNode;
+            input = p.querySelector('input');
+        }
+        if (!input && p.parentNode) {
+            p = p.parentNode;
+            input = p.querySelector('input');
         }
         if (!input) {
             return null;
         }
         else {
-            input.value = value;
-            input.dispatchEvent(inputEvent);
-            return input;
+            return domSelector(input);
         }
     }
     return null;
@@ -139,6 +143,7 @@ function clickText(text, selector) {
 
 let selectorCount = 0;
 function getSelector(text) {
+    console.log('getSelector:', text);
     let len = arguments.length;
     let dom;
     if (len === 2) {
@@ -149,15 +154,19 @@ function getSelector(text) {
     }
 
     if (dom) {
-        let id = dom.getAttribute('night-random-id');
-        if (!id) {
-            selectorCount += 1;
-            id = (selectorCount + '_' + Math.random()).replace('.', '');
-            dom.setAttribute('night-random-id', id);
-        }
-        return dom.tagName + `[night-random-id="${id}"]`;
+        return domSelector(dom);
     }
     return null;
+}
+
+function domSelector(dom) {
+    let id = dom.getAttribute('night-random-id');
+    if (!id) {
+        selectorCount += 1;
+        id = (selectorCount + '_' + Math.random()).replace('.', '');
+        dom.setAttribute('night-random-id', id);
+    }
+    return dom.tagName + `[night-random-id="${id}"]`;
 }
 
 function matchUrl(urlOrReg) {
@@ -201,13 +210,14 @@ function catchError(func) {
             return func.apply(window.$night, argv);
         }
         catch (err) {
+            console.error(err);
             return error(err);
         }
     };
 }
 
 client.findDomByText = catchError(findDomByText);
-client.labelValue = catchError(labelValue);
+client.labelInput = catchError(labelInput);
 client.clickText = catchError(clickText);
 client.matchUrl = catchError(matchUrl);
 client.getSelector = catchError(getSelector);

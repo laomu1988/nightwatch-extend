@@ -13,13 +13,11 @@ module.exports = {
         findDomByText: '等待',
         notText: '等待文字消失',
         matchUrl: '等待跳转',
-        labelValue: '输入',
         clickText: '点击'
     },
     api: {
         getSelector: 'getSelector',
         waitForText: 'findDomByText',
-        labelValue: 'labelValue',
         clickText: 'clickText',
         waitForUrl: 'matchUrl'
     },
