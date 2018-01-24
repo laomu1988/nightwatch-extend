@@ -40,9 +40,8 @@ function command(funcName, args, timeout = 50, cb) {
         args = [];
     }
     const msg = '[' + (config.names[funcName] || funcName) + ']' + args.join(', ');
-    wait();
     function wait() {
-        config.log('exec-util: start', funcName, args, timeout);
+        config.log('$exec-util: start', funcName, args, timeout);
         return common.clientFunc(me.client.api, funcName, args, function (result) {
             config.log('$exec-util: result', funcName, JSON.stringify(result));
             let value = result.value;
@@ -69,6 +68,7 @@ function command(funcName, args, timeout = 50, cb) {
             }
         });
     }
+    process.nextTick(wait);
     return this;
 }
 

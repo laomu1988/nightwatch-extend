@@ -16,7 +16,6 @@ function command() {
     const funcs = arguments;
     let index = 0;
     let len = funcs.length;
-    wait();
     function wait() {
         let func = funcs[index];
         let args = Array.prototype.slice.call(arguments, 0).concat(wait);
@@ -35,10 +34,11 @@ function command() {
             wait();
         }
         else {
-            me.emit('complete');
             config.log('$chain: complete');
+            me.emit('complete');
         }
     }
+    process.nextTick(wait);
     return this;
 }
 

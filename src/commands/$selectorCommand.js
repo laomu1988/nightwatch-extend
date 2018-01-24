@@ -46,7 +46,7 @@ exports.command = function (text, command, commandArgs, cb) {
                         cb.call(me, result);
                     }
                     else {
-                        me.$msg('[' + command + ']' + commandArgs.join(', '));
+                        me.$msg('[' + command + ']' + text.join(',') + ' ' + commandArgs.join(', '));
                     }
                     next();
                     config.log('$selectorCommand: complete', command, JSON.stringify(result));

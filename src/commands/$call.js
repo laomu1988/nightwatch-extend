@@ -14,11 +14,10 @@ const _ = require('lodash');
  */
 function command(func) {
     const me = this;
-    wait();
-    function wait() {
+    process.nextTick(() => {
         func.apply(me.client.api);
         me.emit('complete');
-    }
+    });
     return this;
 }
 

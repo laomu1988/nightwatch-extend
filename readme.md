@@ -23,10 +23,10 @@ npm install nightwatch-extend --save-dev
 ### Commands
 * $msg(msg) 展示消息
 * $chain(func1, func2, func3...) 链式操作，每个函数最后一个参数为next，执行next(arg1, arg2...)即可将参数传入下一个函数
-* $waitForText(text, [timeout = 2000], [cb]) 等待展示文本节点
-* $waitForNotText(text, [timeout = 2000], [cb]) 等待文本消失
+* $waitForText(text, [timeout = 10000], [cb]) 等待展示文本节点
+* $waitForNotText(text, [timeout = 10000], [cb]) 等待文本消失
 * $hasText(text, cb) 判断是否存在text节点，存在则回调函数result的value为true
-* $waitForUrl(urlOrReg, [timeout = 2000], [cb]) 等待跳转到指定链接
+* $waitForUrl(urlOrReg, [timeout = 10000], [cb]) 等待跳转到指定链接
 * $clickText(innerText, cb) 点击根据文本找到到的dom节点
 * $labelValue(labelText, inputValue) 根据label查找输入框并设置值
 * $moveToText(text, cb) 移动鼠标到text节点
@@ -41,3 +41,4 @@ npm install nightwatch-extend --save-dev
 ## 开发注意问题
 * 客户端函数的error对象不能被序列化，所以错误不能作为执行结果返回
 * 客户端返回的dom节点，到执行脚本时只会保留一个Element，结构{ELEMENT: '....'}
+* 带有延迟触发complete事件时，务必保证先返回this对象

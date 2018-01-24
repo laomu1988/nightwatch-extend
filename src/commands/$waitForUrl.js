@@ -12,10 +12,10 @@ let config = require('../config');
  * @param {Function} [cb] 回调函数
  * @return {Object} Nightwatch
  */
-exports.command = function (urlOrReg, timeout = 2000, cb) {
+exports.command = function (urlOrReg, timeout = 10000, cb) {
     if (typeof timeout === 'function') {
         cb = timeout;
-        timeout = 2000;
+        timeout = 10000;
     }
     return this.$execUtil(config.api.waitForUrl, [urlOrReg], timeout, cb);
 };
