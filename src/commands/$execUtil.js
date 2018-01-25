@@ -54,7 +54,7 @@ function command(funcName, args, timeout = 5000, cb) {
                     me.client.api.assert.equal(JSON.stringify(value), 'true', msg);
                 }
                 else if (typeof cb === 'function') {
-                    cb.call(me.client.api, value);
+                    cb.call(me.client.api, result);
                 }
                 me.emit('complete');
             }
