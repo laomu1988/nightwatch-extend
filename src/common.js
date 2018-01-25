@@ -25,8 +25,28 @@ function error(...argv) {
     return {message: msg};
 }
 
+// 默认在浏览器端执行的函数
+function clientDefaultFunc(funcName, args) {
+    if (!window.$night) {
+        // $night is not ready.
+        return null;
+    }
+    if (!window.$night[funcName]) {
+        return window.$night.error('$night has NOT func ' + funcName);
+    }
+    return window.$night[funcName].apply(window.$night, args);
+}
+
 function clientFunc(browser, funcName, args, cb) {
     config.log('common.clientFunc: injectjs', funcName, args);
+    let func = clientDefaultFunc;
+    let argv = [funcName, args];
+    // 假如传入的要执行的函数内容是func
+    if (typeof funcName === 'function') {
+        func = funcName;
+        argv = [args];
+    }
+
     return browser.execute(function (clientjs) {
         if (window.$night) {
             return true;
@@ -47,16 +67,7 @@ function clientFunc(browser, funcName, args, cb) {
         }
     })
     .pause(5)
-    .execute(function (funcName, args) {
-        if (!window.$night) {
-            // $night is not ready.
-            return null;
-        }
-        if (!window.$night[funcName]) {
-            return window.$night.error('$night has NOT func ' + funcName);
-        }
-        return window.$night[funcName].apply(window.$night, args);
-    }, [funcName, args], function (result) {
+    .execute(func, argv, function (result) {
         config.log('common.clientFunc: result', funcName, JSON.stringify(result));
         cb(result);
     });

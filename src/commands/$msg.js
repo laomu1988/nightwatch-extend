@@ -5,10 +5,14 @@
 const config = require('../config');
 function command(msg) {
     config.log('$msg: start', msg);
-    return this.execute(function () {
-        return true;
-    }, [], function () {
-        this.assert.equal(typeof msg, 'string', msg);
+    if (arguments.length > 1) {
+        for (let i = 1; i < arguments.length; i ++) {
+            msg += ',' + JSON.stringify(arguments[i]);
+        }
+    }
+    let me = this;
+    return this.$call(function () {
+        me.assert.equal(typeof msg, 'string', msg);
         config.log('$msg: end', msg);
     });
 }

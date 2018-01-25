@@ -47,7 +47,7 @@ function findDomByText(text, selector, superSelector = 'body') {
     text = (text + '').replace(/\s/g, '');
     let root = superSelector.querySelector ? superSelector : document.querySelector(superSelector);
     if (selector) {
-        let doms = root.querySelector(selector);
+        let doms = root.querySelectorAll(selector);
         let len = doms.length;
         for (let i = len - 1; i >= 0; i--) { // 从后向前查找，避免后面覆盖前面时查找到的是前面内容
             let dom = doms[i];
@@ -73,6 +73,7 @@ function findDomByText(text, selector, superSelector = 'body') {
     }
     return findDomByTextAssist(text, root);
 }
+
 
 function findDomByTextAssist(text, dom) {
     let myText = ((dom.innerText || dom.data) + '').replace(/\s/g, '');
@@ -183,7 +184,16 @@ function matchUrl(urlOrReg) {
 
 // 查找最近的其他文本节点
 function closest(startText, targetText) {
-    let dom = findDomByText(startText);
+    let dom = null;
+    try {
+        dom = document.querySelector(startText);
+    }
+    catch (err) {
+        console.error('try querySelector:', startText);
+    }
+    if (!dom) {
+        dom = findDomByText(startText);
+    }
     if (!dom) {
         return null;
     }
@@ -224,5 +234,6 @@ client.matchUrl = catchError(matchUrl);
 client.getSelector = catchError(getSelector);
 client.error = error;
 client.notText = catchError(notText);
+client.domSelector = catchError(domSelector);
 
 module.exports = client;
