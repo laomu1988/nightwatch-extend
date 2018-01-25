@@ -49,7 +49,7 @@ function findDomByText(text, selector, superSelector = 'body') {
     if (selector) {
         let doms = root.querySelector(selector);
         let len = doms.length;
-        for (let i = 0; i < len; i++) {
+        for (let i = len - 1; i >= 0; i--) { // 从后向前查找，避免后面覆盖前面时查找到的是前面内容
             let dom = doms[i];
             let inner = dom.innerText;
             if (inner && inner.replace(/\s/g, '') === text) {
@@ -80,13 +80,14 @@ function findDomByTextAssist(text, dom) {
         return null;
     }
     if (dom.TEXT_NODE > 0 || dom.childElementCount > 0) {
-        let node = dom.firstChild;
+        // 从后向前查找，避免后面覆盖前面时查找到的是前面内容
+        let node = dom.lastChild;
         while (node) {
             let d = findDomByTextAssist(text, node);
             if (d) {
                 return d.tagName ? d : node;
             }
-            node = node.nextSibling;
+            node = node.previousSibling;
         }
     }
     if (text === myText) {
