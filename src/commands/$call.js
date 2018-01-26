@@ -1,5 +1,5 @@
 /**
- * @file 链式调用
+ * @file 执行函数
  * @author laomu1988@qq.com
  */
 const util = require('util');
@@ -8,7 +8,7 @@ const config = require('../config');
 const _ = require('lodash');
 
 /**
- * 链式调用
+ * 执行脚本函数
  * @param {Function} func 要执行的函数
  * @return {Object} Nightwatch
  */

@@ -9,6 +9,7 @@ let isDebug = process.env.debug
 module.exports = {
     debug: isDebug,
     log: debug,
+    cookiePath: __dirname + '/../test/cookie.json',
     names: {
         findDomByText: '等待',
         notText: '等待文字消失',
