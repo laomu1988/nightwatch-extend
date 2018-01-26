@@ -51,6 +51,8 @@ npm install nightwatch-extend --save-dev
 * $dragTo(from, target) 拖动动作
 
 ## version
+* v1.0.3
+  - fix文档中引入路径错误
 * v1.0.2
   - 增加$call
   - 增加$chain
@@ -58,7 +60,6 @@ npm install nightwatch-extend --save-dev
   - 增加$clickClosestText
   - 增加$catchResult
   - 增加$recordCookies和$setCookiesFromRecord
-
 * v1.0.1
   - 增加$msg
   - fix节点查找错误
