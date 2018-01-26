@@ -22,20 +22,24 @@ function command() {
         index += 1;
         if (typeof func === 'function') {
             config.log('$chain:', index, arguments);
-            try {
-                func.apply(me.client.api, args);
-            }
-            catch (err) {
-                console.error(err);
-            }
+            process.nextTick(function () {
+                try {
+                    func.apply(me.client.api, args);
+                }
+                catch (err) {
+                    console.error(err);
+                }
+            });
         }
         else if (index < len) {
-            config.log('$chain:', index, arguments);
-            wait();
+            config.log('$chain: NOT FUNCTION', index, arguments);
+            process.nextTick(wait);
         }
         else {
-            config.log('$chain: complete');
-            me.emit('complete');
+            process.nextTick(function () {
+                config.log('$chain: complete');
+                me.emit('complete');
+            });
         }
     }
     process.nextTick(wait);

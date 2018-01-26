@@ -152,7 +152,14 @@ function getSelector(text) {
         dom = closest(text, arguments[1]);
     }
     else {
-        dom = findDomByText(text);
+        try {
+            dom = document.querySelector(text);
+        }
+        catch (err) {
+        }
+        if (!dom) {
+            dom = findDomByText(text);
+        }
     }
 
     if (dom) {
@@ -165,7 +172,7 @@ function domSelector(dom) {
     let id = dom.getAttribute('night-random-id');
     if (!id) {
         selectorCount += 1;
-        id = (selectorCount + '_' + Math.random()).replace('.', '');
+        id = (selectorCount + '_' + Math.random()).replace('.', '').slice(0, 9);
         dom.setAttribute('night-random-id', id);
     }
     return dom.tagName + `[night-random-id="${id}"]`;

@@ -31,7 +31,9 @@ exports.command = function (callback) {
                 me.$msg('[写入cookies信息]从之前的记录中获取的cookies');
             }
             me.$call(function () {
-                callback({value: hasCookie});
+                if (typeof callback === 'function') {
+                    callback({value: hasCookie});
+                }
                 done();
             });
         });
