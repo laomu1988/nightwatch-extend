@@ -10,8 +10,8 @@ npm install nightwatch-extend --save-dev
 在 Nightwatch 配置文件中增加:
 ```
 {
-  "custom_commands_path": ["node_modules/nightwatch-helpers/commands"],
-  "custom_assertions_path": ["node_modules/nightwatch-helpers/assertions"]
+  "custom_commands_path": ["./node_modules/nightwatch-helpers/src/commands"],
+  "custom_assertions_path": ["./node_modules/nightwatch-helpers/src/assertions"]
 }
 ```
 
