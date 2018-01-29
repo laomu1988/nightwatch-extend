@@ -12,7 +12,7 @@ exports.command = function (text, value, cb) {
     let msg = '[输入]' + text + (_.isArray(value) ? value.join(',') : value);
     config.log(msg);
     return this.screenshot().$chain(function (done) {
-        me.$exec('labelInput', [text], function (result) {
+        me.$exec('labelInputSelector', [text], function (result) {
             config.log(msg, result);
             selector = result.value;
             if (typeof selector !== 'string') {
@@ -23,7 +23,7 @@ exports.command = function (text, value, cb) {
     // }, function (done) {
     //     setTimeout(done, 1000000);
     }, function (done) {
-        me.setValue(selector, value, function (result) {
+        me.clearValue(selector).setValue(selector, value, function (result) {
             config.log(msg, result);
             if (result.value && result.value.message) {
                 me.assert.equal(JSON.stringify(result.value), 'null', msg);

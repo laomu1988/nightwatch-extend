@@ -1,6 +1,6 @@
 /**
  * @file 存在文本内容（注意除了空格外务必和节点内容完全一致）
- * @param {strong} text
+ * @param {string} text
  */
 const config = require('../config');
 

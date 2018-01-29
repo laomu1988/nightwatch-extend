@@ -59,6 +59,11 @@ function findDomByText(text, selector, superSelector = 'body') {
             if (value && value.replace(/\s/g, '') === text) {
                 return dom;
             }
+
+            value = dom.getAttribute('placeholder');
+            if (value && value.replace(/\s/g, '') === text) {
+                return dom;
+            }
         }
         return null;
     }
@@ -67,6 +72,16 @@ function findDomByText(text, selector, superSelector = 'body') {
     for (let i = 0; i < values.length; i++) {
         let dom = values[i];
         let value = dom.getAttribute('value');
+        if (value && value.replace(/\s/g, '') === text) {
+            return dom;
+        }
+    }
+
+    // 查询input元素的placeholder
+    values = document.querySelectorAll('[placeholder]');
+    for (let i = 0; i < values.length; i++) {
+        let dom = values[i];
+        let value = dom.getAttribute('placeholder');
         if (value && value.replace(/\s/g, '') === text) {
             return dom;
         }
@@ -108,12 +123,12 @@ function notText(text) {
 /**
  * 根据label查找输入框
  * @param {string} label label中文字
- * @return {string} 查找到的输入框, 未找到输入框时返回null
+ * @return {DOM} 查找到的输入框, 未找到输入框时返回null
  */
 function labelInput(label) {
     console.log('labelInput:', label);
     let dom = findDomByText(label);
-    if (dom) {
+    if (dom && dom.querySelector) {
         let p = dom;
         let input = p.querySelector('input');
         if (!input && p.parentNode) {
@@ -128,11 +143,27 @@ function labelInput(label) {
             return null;
         }
         else {
-            return domSelector(input);
+            return input;
         }
     }
     return null;
 }
+
+/**
+ * 根据label查找输入框
+ * @param {string} label label中文字
+ * @return {string} 查找到的输入框的选择器, 未找到输入框时返回null
+ */
+function labelInputSelector(label, ) {
+    console.log('labelInputSelector:', label);
+    let dom = labelInput(label);
+    if (dom) {
+        return domSelector(dom);
+    }
+    return null;
+}
+
+
 
 function clickText(text, selector) {
     let dom = findDomByText(text, selector);
@@ -236,6 +267,7 @@ function catchError(func) {
 
 client.findDomByText = catchError(findDomByText);
 client.labelInput = catchError(labelInput);
+client.labelInputSelector = catchError(labelInputSelector);
 client.clickText = catchError(clickText);
 client.matchUrl = catchError(matchUrl);
 client.getSelector = catchError(getSelector);

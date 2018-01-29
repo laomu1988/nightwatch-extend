@@ -16,9 +16,12 @@ npm install nightwatch-extend --save-dev
 ```
 
 ## 包含内容
+> 所有文字text除了空格外其他内容和独立dom节点内的文字务必全部相同，否则就查找不到对应dom节点
+
 ### Assertions
 * $hasText(text) 存在文本内容为text的节点（文本会过滤空格，避免空格影响判断）
 * $notText(text) 不存在文本内容为text的节点（文本会过滤空格，避免空格影响判断）
+* $labelValue(labe, value, msg) 根据label查找到的输入框内的值等于指定值
 
 ### Commands
 * $msg(msg) 展示消息
@@ -31,7 +34,8 @@ npm install nightwatch-extend --save-dev
 * $labelValue(labelText, inputValue) 根据label查找输入框并设置值
 * $moveToText(text, cb) 移动鼠标到text节点
 * $call(func) 执行func, 非异步(执行环境是命令端)
-* $chain(func1, func2, func3...) 链式操作，每个函数最后一个参数为next，执行next(arg1, arg2...)即可将参数传入下一个函数
+* $chain(func1, func2, func3...) 命令端链式操作，每个函数最后一个参数为next，执行next(arg1, arg2...)即可将参数传入下一个函数
+* $exec(func, [args], [cb]) 浏览器端执行函数
 * $wait(func, [args], [timeout = 5000], [cb]) 浏览器端反复执行函数直到函数返回true(!value为true)则结束执行
 * $catchResult(result, msg) 根据result判断是否有错误（result.value.message），假如有错误就中断执行并展示错误信息
 * $recordCookies() 记录当前页面的cookie信息
@@ -51,6 +55,10 @@ npm install nightwatch-extend --save-dev
 * $dragTo(from, target) 拖动动作
 
 ## version
+* v1.0.4
+  - 增加assert.$labelValue
+  - 开放$exec并修复执行代码时传参错误
+  - 客户端脚本findDomByText根据文字查找dom节点可根据placeholder查询
 * v1.0.3
   - fix文档中引入路径错误
 * v1.0.2

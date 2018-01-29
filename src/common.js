@@ -38,15 +38,18 @@ function clientDefaultFunc(funcName, args) {
 }
 
 function clientFunc(browser, funcName, args, cb) {
-    config.log('common.clientFunc: injectjs', funcName, args);
     let func = clientDefaultFunc;
+    if (typeof args === 'function') {
+        cb = args;
+        args = [];
+    }
     let argv = [funcName, args];
     // 假如传入的要执行的函数内容是func
     if (typeof funcName === 'function') {
         func = funcName;
-        argv = [args];
+        argv = args;
     }
-
+    config.log('common.clientFunc: injectjs', func, argv);
     return browser.execute(function (clientjs) {
         if (window.$night) {
             return true;
