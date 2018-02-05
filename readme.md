@@ -32,6 +32,7 @@ npm install nightwatch-extend --save-dev
 * $clickText(innerText, cb) 点击根据文本找到到的dom节点
 * $clickClosestText(start, target, cb) 点击start节点临近的target节点
 * $labelValue(labelText, inputValue) 根据label查找输入框并设置值
+* $clearValue(selectorOrText, cb) 清空输入框的值
 * $moveToText(text, cb) 移动鼠标到text节点
 * $call(func) 执行func, 非异步(执行环境是命令端)
 * $chain(func1, func2, func3...) 命令端链式操作，每个函数最后一个参数为next，执行next(arg1, arg2...)即可将参数传入下一个函数
@@ -55,6 +56,9 @@ npm install nightwatch-extend --save-dev
 * $dragTo(from, target) 拖动动作
 
 ## version
+* v1.0.5
+  - 增加$clearValue命令
+  - $labelValue命令执行时先清空输入内容
 * v1.0.4
   - 增加assert.$labelValue
   - 开放$exec并修复执行代码时传参错误

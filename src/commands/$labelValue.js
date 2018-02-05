@@ -23,11 +23,9 @@ exports.command = function (text, value, cb) {
     // }, function (done) {
     //     setTimeout(done, 1000000);
     }, function (done) {
-        me.clearValue(selector).setValue(selector, value, function (result) {
+        me.$clearValue(selector).setValue(selector, value, function (result) {
             config.log(msg, result);
-            if (result.value && result.value.message) {
-                me.assert.equal(JSON.stringify(result.value), 'null', msg);
-            }
+            me.$catchResult(result, msg);
             if (typeof cb === 'function') {
                 cb(result);
             }

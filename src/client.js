@@ -55,7 +55,8 @@ function findDomByText(text, selector, superSelector = 'body') {
             if (inner && inner.replace(/\s/g, '') === text) {
                 return dom;
             }
-            let value = dom.getAttribute('value');
+            // input元素的当前输入值
+            let value = dom.getAttribute('value') || dom.value;
             if (value && value.replace(/\s/g, '') === text) {
                 return dom;
             }
@@ -67,11 +68,11 @@ function findDomByText(text, selector, superSelector = 'body') {
         }
         return null;
     }
-    // 部分元素的value属性，例如input
-    let values = document.querySelectorAll('[value]');
+    // input元素的当前输入值
+    let values = document.querySelectorAll('input');
     for (let i = 0; i < values.length; i++) {
         let dom = values[i];
-        let value = dom.getAttribute('value');
+        let value = dom.getAttribute('value') || dom.value;
         if (value && value.replace(/\s/g, '') === text) {
             return dom;
         }
@@ -265,6 +266,7 @@ function catchError(func) {
     };
 }
 
+client.inputEvent = inputEvent;
 client.findDomByText = catchError(findDomByText);
 client.labelInput = catchError(labelInput);
 client.labelInputSelector = catchError(labelInputSelector);
