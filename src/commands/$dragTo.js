@@ -2,6 +2,7 @@
  * @file 拖动节点到另一个节点上
  */
 const config = require('../config');
+const common = require('../common');
 function command(fromText, toText) {
     let me = this;
     return this
@@ -14,9 +15,7 @@ function command(fromText, toText) {
         .mouseButtonDown()
         .$msg('[鼠标按下]')
         .pause(20)
-        .$selectorCommand(toText, 'moveToElement', [5, 5], function (result) {
-            me.$catchResult(result, '移动到节点');
-        })
+        .$selectorCommand(toText, 'moveToElement', [5, 5], common.catchResult(this, '移动到节点' + toText))
         .pause(2000)
         .$msg('[鼠标移动]')
         .pause(20)

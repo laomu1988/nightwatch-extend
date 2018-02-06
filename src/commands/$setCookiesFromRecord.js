@@ -4,7 +4,7 @@
  */
 
 const cookies = require('../cookies.js');
-
+const common = require('../common');
 cookies.readCookie();
 
 exports.command = function (callback) {
@@ -25,7 +25,7 @@ exports.command = function (callback) {
             if (hasCookie) {
                 for (let attr in cookie) {
                     if (cookie[attr] && cookie[attr].name) {
-                        me = me.setCookie(cookie[attr]);
+                        me = me.setCookie(cookie[attr], common.catchResult(me, '设置cookies'));
                     }
                 }
                 me.$msg('[写入cookies信息]从之前的记录中获取的cookies');

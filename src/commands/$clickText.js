@@ -4,16 +4,10 @@
  */
 
 let config = require('../config');
+let common = require('../common');
 
 exports.command = function (text, cb) {
     config.log('$clickText: start', text);
     const msg = '[点击]' + text;
-    return this.$selectorCommand(text, 'click', function (result) {
-        if (!cb) {
-            this.assert.equal(JSON.stringify(result.value), 'null', msg);
-        }
-        else {
-            cb(result);
-        }
-    });
+    return this.$selectorCommand(text, 'click', common.catchResult(this, msg, cb));
 };

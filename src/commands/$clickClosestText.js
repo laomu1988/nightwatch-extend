@@ -4,7 +4,7 @@
  */
 
 let config = require('../config');
-
+let common = require('../common');
 /**
  * 点击临近的文本内容
  * @param {string} text 起始节点文本或者css选择器
@@ -14,5 +14,6 @@ let config = require('../config');
  */
 exports.command = function (text, targetText, cb) {
     config.log('$clickClosest: start', text, targetText);
-    return this.$selectorCommand([text, targetText], 'click', cb);
+    let msg = '[点击临近节点]' + text + ',' + targetText;
+    return this.$selectorCommand([text, targetText], 'click', common.catchResult(this, msg, cb));
 };

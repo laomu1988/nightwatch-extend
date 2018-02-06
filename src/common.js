@@ -76,7 +76,22 @@ function clientFunc(browser, funcName, args, cb) {
     });
 }
 
+
+function catchResult(browser, msg, cb) {
+    if (typeof msg === 'function') {
+        cb = msg;
+        msg = '';
+    }
+    return function(result) {
+        browser.$catchResult(result, msg);
+        if (typeof cb === 'function') {
+            cb(result);
+        }
+    }
+}
+
 module.exports = {
     error,
+    catchResult,
     clientFunc
 };
