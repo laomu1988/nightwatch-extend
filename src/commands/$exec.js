@@ -28,16 +28,5 @@ exports.command = function (funcName, args, cb) {
     }
     const msg = '[' + (config.names[funcName] || funcName) + ']' + args.join(', ');
     config.log('$exec: start', funcName, args);
-    return common.clientFunc(me, funcName, args, function (result) {
-        let value = result.value;
-        if (typeof cb === 'function') {
-            cb(result);
-        }
-        else {
-            if (value && value.ELEMENT) { // 返回了元素节点
-                value = true;
-            }
-            me.client.api.assert.equal(JSON.stringify(value), 'true', msg);
-        }
-    });
+    return common.clientFunc(me, funcName, args, common.catchResult(this, msg, cb));
 };

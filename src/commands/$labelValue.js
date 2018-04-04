@@ -9,7 +9,7 @@ let config = require('../config');
 exports.command = function (text, value, cb) {
     let me = this;
     let selector = '';
-    let msg = '[输入]' + text + (_.isArray(value) ? value.join(',') : value);
+    let msg = '[输入]' + text + ':' + (_.isArray(value) ? value.join(',') : value);
     config.log(msg);
     return this.screenshot().$chain(function (done) {
         me.$exec('labelInputSelector', [text], function (result) {
@@ -25,7 +25,7 @@ exports.command = function (text, value, cb) {
     }, function (done) {
         me.$clearValue(selector).setValue(selector, value, function (result) {
             config.log(msg, result);
-            me.$catchResult(result, msg);
+            me.$catchResult(result, msg + ' selector:【 ' + selector + '  】');
             if (typeof cb === 'function') {
                 cb(result);
             }

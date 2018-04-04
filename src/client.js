@@ -29,7 +29,7 @@ function error(...argv) {
     else {
         msg = argv.join('，');
     }
-    return {message: msg};
+    return {message: 'ClientError:' + msg};
 }
 
 /**
@@ -47,7 +47,7 @@ function findDomByText(text, selector, superSelector = 'body') {
     text = (text + '').replace(/\s/g, '');
     let root = superSelector.querySelector ? superSelector : document.querySelector(superSelector);
     if (selector) {
-        let doms = root.querySelectorAll(selector);
+        let doms = $(root.querySelectorAll(selector)).filter(':visible');
         let len = doms.length;
         for (let i = len - 1; i >= 0; i--) { // 从后向前查找，避免后面覆盖前面时查找到的是前面内容
             let dom = doms[i];
@@ -69,9 +69,12 @@ function findDomByText(text, selector, superSelector = 'body') {
         return null;
     }
     // input元素的当前输入值
-    let values = document.querySelectorAll('input');
+    let values = $(document.querySelectorAll('input')).filter(':visible');
     for (let i = 0; i < values.length; i++) {
         let dom = values[i];
+        if (dom.style.display === 'none') {
+            continue;
+        }
         let value = dom.getAttribute('value') || dom.value;
         if (value && value.replace(/\s/g, '') === text) {
             return dom;
@@ -79,7 +82,7 @@ function findDomByText(text, selector, superSelector = 'body') {
     }
 
     // 查询input元素的placeholder
-    values = document.querySelectorAll('[placeholder]');
+    values = $(document.querySelectorAll('[placeholder]')).filter(':visible');
     for (let i = 0; i < values.length; i++) {
         let dom = values[i];
         let value = dom.getAttribute('placeholder');
@@ -131,14 +134,14 @@ function labelInput(label) {
     let dom = findDomByText(label);
     if (dom && dom.querySelector) {
         let p = dom;
-        let input = p.querySelector('input');
+        let input = $(p.querySelectorAll('input')).filter(':visible')[0];
         if (!input && p.parentNode) {
             p = p.parentNode;
-            input = p.querySelector('input');
+            input = $(p.querySelectorAll('input')).filter(':visible')[0];
         }
         if (!input && p.parentNode) {
             p = p.parentNode;
-            input = p.querySelector('input');
+            input = $(p.querySelectorAll('input')).filter(':visible')[0];
         }
         if (!input) {
             return null;
@@ -155,7 +158,7 @@ function labelInput(label) {
  * @param {string} label label中文字
  * @return {string} 查找到的输入框的选择器, 未找到输入框时返回null
  */
-function labelInputSelector(label, ) {
+function labelInputSelector(label) {
     console.log('labelInputSelector:', label);
     let dom = labelInput(label);
     if (dom) {
@@ -200,14 +203,35 @@ function getSelector(text) {
     return null;
 }
 
+/**
+ * 根据dom计算其选择器
+ * @param {Dom} dom 节点对象
+ * @return {string} 选择器
+ */
 function domSelector(dom) {
-    let id = dom.getAttribute('night-random-id');
-    if (!id) {
-        selectorCount += 1;
-        id = (selectorCount + '_' + Math.random()).replace('.', '').slice(0, 9);
-        dom.setAttribute('night-random-id', id);
+    let selector = '';
+    while (dom) {
+        let now = dom.tagName.toLowerCase();
+        if (dom.parentElement) {
+            let children = dom.parentElement.children;
+            for(let i = 0; i < children.length; i++) {
+                if (dom === children[i]) {
+                    now += ':nth-child(' + (i + 1) + ')';
+                    break;
+                }
+            }
+        }
+        if (dom.id) {
+            now += '#' + dom.id;
+        }
+        let classes = dom.getAttribute('class');
+        if (classes) {
+            now += '.' + classes.split(' ').join('.');
+        }
+        selector = now + (selector ? ' > ' : '') + selector;
+        dom = dom.parentElement;
     }
-    return dom.tagName + `[night-random-id="${id}"]`;
+    return selector;
 }
 
 function matchUrl(urlOrReg) {
