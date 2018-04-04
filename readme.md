@@ -56,6 +56,8 @@ npm install nightwatch-extend --save-dev
 * $dragTo(from, target) 拖动动作
 
 ## version
+* v1.0.6
+  - fix: 查找节点时不查找隐藏节点，避免后续操作失败
 * v1.0.5
   - 增加$clearValue命令
   - $labelValue命令执行时先清空输入内容
